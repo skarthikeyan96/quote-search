@@ -120,10 +120,11 @@ export default function QuoteSearchApp() {
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const searchInstanceRef = useRef<InstantSearch | null>(null);
 
-  // State for saved snippets - start with empty array to avoid hydration mismatch
+  // State for saved quotes - start with empty array to avoid hydration mismatch
   const [savedQuotes, setSavedQuotes] = useState<any[]>([]);
   const [showSavedModal, setShowSavedModal] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isSearchReady, setIsSearchReady] = useState(false);
 
   const { toast } = useToast();
 
@@ -307,6 +308,9 @@ export default function QuoteSearchApp() {
     search.start();
     searchInstanceRef.current = search;
 
+    // Set search as ready after initialization
+    setIsSearchReady(true);
+
     // Add event listener for bookmark buttons
     const handleBookmarkClick = (event: Event) => {
       const target = event.target as HTMLElement;
@@ -475,10 +479,17 @@ export default function QuoteSearchApp() {
           <div id="filter-character"></div>
 
           {/* Search Results */}
-          <div id="algolia-hits"></div>
-
-          {/* Pagination */}
-          <div id="algolia-pagination"></div>
+          {!isSearchReady ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading quotes...</p>
+            </div>
+          ) : (
+            <>
+              <div id="algolia-hits"></div>
+              <div id="algolia-pagination"></div>
+            </>
+          )}
         </div>
 
         {/* Saved Snippets Modal */}
