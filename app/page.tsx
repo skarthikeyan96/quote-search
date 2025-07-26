@@ -479,17 +479,20 @@ export default function QuoteSearchApp() {
           <div id="filter-character"></div>
 
           {/* Search Results */}
-          {!isSearchReady ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading quotes...</p>
-            </div>
-          ) : (
-            <>
-              <div id="algolia-hits"></div>
-              <div id="algolia-pagination"></div>
-            </>
-          )}
+          <div id="algolia-hits" className={!isSearchReady ? "hidden" : ""}>
+            {!isSearchReady && (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading quotes...</p>
+              </div>
+            )}
+          </div>
+
+          {/* Pagination */}
+          <div
+            id="algolia-pagination"
+            className={!isSearchReady ? "hidden" : ""}
+          ></div>
         </div>
 
         {/* Saved Snippets Modal */}
